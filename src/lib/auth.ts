@@ -1,6 +1,8 @@
 import { SignJWT, jwtVerify } from 'jose';
 
-const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) throw new Error('JWT_SECRET environment variable is not set');
+const secret = new TextEncoder().encode(jwtSecret);
 
 export async function createSessionToken() {
   return new SignJWT({ authenticated: true })

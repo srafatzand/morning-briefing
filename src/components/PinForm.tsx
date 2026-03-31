@@ -17,11 +17,14 @@ export function PinForm({ from }: { from: string }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ pin }),
     });
-    if (res.ok) {
-      router.push(from);
-    } else {
-      setError('Incorrect PIN. Try again.');
-      setPin('');
+    try {
+      if (res.ok) {
+        router.push(from);
+      } else {
+        setError('Incorrect PIN. Try again.');
+        setPin('');
+      }
+    } finally {
       setLoading(false);
     }
   }
