@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /Users/samyarrafatzand/Projects/morning-briefing -type f -not -path */.git/*)"
+    ]
+  }
+}
