@@ -16,7 +16,7 @@ npm run db:studio
 
 ## Non-Obvious Architecture Decisions
 
-- **Middleware** (`src/middleware.ts`) blocks all routes except `/login`, `/api/auth/*`, `/_next/*`, `favicon.ico`. Do not add new public routes without updating the matcher.
+- **Proxy** (`src/proxy.ts`) blocks all routes except `/login`, `/api/auth/*`, `/_next/*`, `favicon.ico`. In Next.js 16, `middleware.ts` is renamed to `proxy.ts` with the function exported as `proxy`. Do not add new public routes without updating the matcher.
 - **Generation is idempotent** — `/api/generate` returns 409 if today's briefing already exists. Never remove this check.
 - **`/today` empty state** — when no briefing exists for today, render a "coming soon" message. Do not throw or redirect.
 - **`/archive/[date]`** — call `notFound()` for unknown dates. Do not render an empty state.
