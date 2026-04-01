@@ -2,7 +2,7 @@
 
 A personal, password-protected daily news briefing web app. Every night, a scheduler calls the Claude API with live web search to generate a curated briefing across 7 topics. Visit the site in the morning, enter your PIN, and read.
 
-Built with Next.js 15, TypeScript, Tailwind CSS, Drizzle ORM, PostgreSQL (Neon), and the Anthropic SDK.
+Built with Next.js 16, TypeScript, Tailwind CSS v4, Drizzle ORM, PostgreSQL (Neon), and the Anthropic SDK.
 
 ---
 
@@ -95,7 +95,7 @@ npm run generate 2026-03-30
 
 ```
 src/
-├── middleware.ts              # PIN gate — runs before every request
+├── proxy.ts                   # PIN gate — runs before every request
 ├── app/
 │   ├── login/page.tsx         # PIN entry page
 │   ├── today/page.tsx         # Today's briefing
