@@ -22,7 +22,7 @@ export default async function TodayPage() {
           date={briefing.date}
         />
       ) : (
-        <div className="max-w-2xl mx-auto px-6 py-24 text-center">
+        <div className="max-w-3xl mx-auto px-6 py-24 text-center">
           <p className="font-serif text-2xl text-neutral-400">Today&apos;s briefing is being prepared.</p>
           <p className="text-sm text-neutral-400 mt-2">Check back after 3am EST.</p>
         </div>

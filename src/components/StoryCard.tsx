@@ -1,19 +1,32 @@
 import type { Story } from '@/types';
 import type { ReactNode } from 'react';
 
-function renderSummary(text: string): ReactNode {
-  // Strip <cite index="...">...</cite> wrappers — keep inner text
+// Split summary into paragraphs. Uses explicit \n\n breaks if present,
+// otherwise groups sentences into chunks of 3 for older DB entries.
+function getParagraphs(text: string): string[] {
   const stripped = text.replace(/<cite[^>]*>/g, '').replace(/<\/cite>/g, '');
+  if (stripped.includes('\n\n')) {
+    return stripped.split(/\n\n+/).map(s => s.trim()).filter(Boolean);
+  }
+  const sentences = stripped.match(/[^.!?]+[.!?]+\s*/g) ?? [stripped];
+  const paragraphs: string[] = [];
+  for (let i = 0; i < sentences.length; i += 3) {
+    const chunk = sentences.slice(i, i + 3).join('').trim();
+    if (chunk) paragraphs.push(chunk);
+  }
+  return paragraphs.length > 0 ? paragraphs : [stripped];
+}
 
+function renderSummary(text: string): ReactNode {
   // Parse [text](url) markdown links into anchor elements
   const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
   const parts: ReactNode[] = [];
   let lastIndex = 0;
   let match: RegExpExecArray | null;
 
-  while ((match = linkRegex.exec(stripped)) !== null) {
+  while ((match = linkRegex.exec(text)) !== null) {
     if (match.index > lastIndex) {
-      parts.push(stripped.slice(lastIndex, match.index));
+      parts.push(text.slice(lastIndex, match.index));
     }
     parts.push(
       <a
@@ -29,11 +42,11 @@ function renderSummary(text: string): ReactNode {
     lastIndex = match.index + match[0].length;
   }
 
-  if (lastIndex < stripped.length) {
-    parts.push(stripped.slice(lastIndex));
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
   }
 
-  return parts.length > 1 ? parts : stripped;
+  return parts.length > 1 ? parts : text;
 }
 
 export function StoryCard({ story }: { story: Story }) {
@@ -52,7 +65,7 @@ export function StoryCard({ story }: { story: Story }) {
         />
       )}
       <div className="space-y-3">
-        {story.summary.split(/\n\n+/).map((para, i) => (
+        {getParagraphs(story.summary).map((para, i) => (
           <p key={i} className="text-neutral-600 text-sm leading-relaxed">
             {renderSummary(para)}
           </p>

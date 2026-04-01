@@ -33,7 +33,7 @@ export function BriefingView({ content, date }: Props) {
   const readMinutes = Math.max(1, Math.round(wordCount / 200));
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-12">
+    <div className="max-w-3xl mx-auto px-6 py-12">
       <header className="mb-8">
         <p className="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3">
           Morning Briefing
