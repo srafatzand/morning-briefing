@@ -4,10 +4,9 @@ import { TopicSection } from './TopicSection';
 interface Props {
   content: BriefingContent;
   date: string;
-  generatedAt: Date;
 }
 
-export function BriefingView({ content, date, generatedAt }: Props) {
+export function BriefingView({ content, date }: Props) {
   const formatted = new Date(date + 'T12:00:00').toLocaleDateString('en-CA', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
   });
@@ -21,8 +20,8 @@ export function BriefingView({ content, date, generatedAt }: Props) {
         <p className="text-xs text-neutral-400 mt-3">{storyCount} stories</p>
       </header>
       <main>
-        {content.sections.map((section, i) => (
-          <TopicSection key={i} section={section} />
+        {content.sections.map((section) => (
+          <TopicSection key={section.topic} section={section} />
         ))}
       </main>
     </div>

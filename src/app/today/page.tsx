@@ -1,11 +1,11 @@
-export const dynamic = 'force-dynamic';
-
 import { db } from '@/lib/db';
 import { briefings } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { BriefingView } from '@/components/BriefingView';
 import { Header } from '@/components/Header';
 import type { BriefingContent } from '@/types';
+
+export const dynamic = 'force-dynamic';
 
 export default async function TodayPage() {
   const today = new Date().toISOString().split('T')[0];
@@ -20,7 +20,6 @@ export default async function TodayPage() {
         <BriefingView
           content={briefing.content as BriefingContent}
           date={briefing.date}
-          generatedAt={briefing.generatedAt}
         />
       ) : (
         <div className="max-w-2xl mx-auto px-6 py-24 text-center">

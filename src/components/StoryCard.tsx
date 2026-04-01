@@ -11,7 +11,7 @@ export function StoryCard({ story }: { story: Story }) {
         <div className="mt-2 flex flex-wrap gap-3">
           {story.sources.map((src, i) => (
             <a
-              key={i}
+              key={src}
               href={src}
               target="_blank"
               rel="noopener noreferrer"
