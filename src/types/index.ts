@@ -6,6 +6,7 @@ export interface Story {
 
 export interface Section {
   topic: string;
+  context?: string;
   stories: Story[];
 }
 

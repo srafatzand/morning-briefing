@@ -28,12 +28,24 @@ CONTENT RULES:
 - Each summary is 4-6 sentences, plain direct language
 - Filter for relevance to someone building at the intersection of tech, medicine, startups
 - For Claude/Anthropic: search specifically for Anthropic announcements or research
+- Do NOT include <cite> tags or any XML/HTML markup in text fields — plain text only
+- In summaries, include occasional markdown links [term](url) to help explain jargon or provide further reading. Especially for AI & Tech and Biotech & Medicine, link technical terms (e.g. [GLP-1 receptor agonist](url), [transformer architecture](url)) to authoritative explanations like Wikipedia, Nature, or reputable news. 1-3 inline links per summary is ideal — don't overdo it.
+
+SECTION CONTEXT:
+For "Geopolitics", "Iran News", and "Canadian / Quebec News" sections, include a "context" field: 2 sentences of essential background that frames why this region/topic matters right now. This is not a story — it's orientation for the reader. Keep it factual and brief.
 
 OUTPUT: Return ONLY a valid JSON object. No markdown fences, no preamble.
 {
   "sections": [
     {
       "topic": "AI & Tech",
+      "stories": [
+        { "headline": "...", "summary": "...", "sources": ["url"] }
+      ]
+    },
+    {
+      "topic": "Geopolitics",
+      "context": "Two sentences of background on the current geopolitical landscape.",
       "stories": [
         { "headline": "...", "summary": "...", "sources": ["url"] }
       ]
