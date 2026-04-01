@@ -2,6 +2,7 @@ export interface Story {
   headline: string;
   summary: string;
   sources: string[];
+  imageUrl?: string;
 }
 
 export interface Section {

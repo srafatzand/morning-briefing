@@ -42,6 +42,15 @@ export function StoryCard({ story }: { story: Story }) {
       <h3 className="font-serif text-lg font-semibold leading-snug mb-2">
         {story.headline}
       </h3>
+      {story.imageUrl && (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
+          src={story.imageUrl}
+          alt={story.headline}
+          loading="lazy"
+          className="w-full rounded-lg object-cover max-h-64 mb-3"
+        />
+      )}
       <p className="text-neutral-600 text-sm leading-relaxed">{renderSummary(story.summary)}</p>
       {story.sources.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-3">

@@ -30,6 +30,7 @@ CONTENT RULES:
 - For Claude/Anthropic: search specifically for Anthropic announcements or research
 - Do NOT include <cite> tags or any XML/HTML markup in text fields — plain text only
 - In summaries, include occasional markdown links [term](url) to help explain jargon or provide further reading. Especially for AI & Tech and Biotech & Medicine, link technical terms (e.g. [GLP-1 receptor agonist](url), [transformer architecture](url)) to authoritative explanations like Wikipedia, Nature, or reputable news. 1-3 inline links per summary is ideal — don't overdo it.
+- For stories where a relevant image genuinely enriches understanding — a geopolitical map, a biotech diagram, a chart from a study, a photo of a key location — include an "imageUrl" field with a direct URL to a publicly accessible image (Wikimedia Commons is reliable). Only include imageUrl when you are highly confident the URL is stable and accessible. Omit entirely if uncertain. Do NOT include images for routine text-based stories.
 
 SECTION CONTEXT:
 For "Geopolitics", "Iran News", and "Canadian / Quebec News" sections, include a "context" field: 2 sentences of essential background that frames why this region/topic matters right now. This is not a story — it's orientation for the reader. Keep it factual and brief.
@@ -47,7 +48,7 @@ OUTPUT: Return ONLY a valid JSON object. No markdown fences, no preamble.
       "topic": "Geopolitics",
       "context": "Two sentences of background on the current geopolitical landscape.",
       "stories": [
-        { "headline": "...", "summary": "...", "sources": ["url"] }
+        { "headline": "...", "summary": "...", "sources": ["url"], "imageUrl": "https://upload.wikimedia.org/..." }
       ]
     }
   ]
