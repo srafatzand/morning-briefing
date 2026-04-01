@@ -6,12 +6,14 @@ import { Header } from '@/components/Header';
 import { notFound } from 'next/navigation';
 import type { BriefingContent } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ArchiveDatePage({ params }: { params: Promise<{ date: string }> }) {
   const { date } = await params;
   const briefing = await db.query.briefings.findFirst({
     where: eq(briefings.date, date),
   });
-  if (!briefing) notFound();
+  if (!briefing) return notFound();
   return (
     <>
       <Header />
