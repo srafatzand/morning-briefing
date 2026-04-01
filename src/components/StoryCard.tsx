@@ -51,7 +51,13 @@ export function StoryCard({ story }: { story: Story }) {
           className="w-full rounded-lg object-cover max-h-64 mb-3"
         />
       )}
-      <p className="text-neutral-600 text-sm leading-relaxed">{renderSummary(story.summary)}</p>
+      <div className="space-y-3">
+        {story.summary.split(/\n\n+/).map((para, i) => (
+          <p key={i} className="text-neutral-600 text-sm leading-relaxed">
+            {renderSummary(para)}
+          </p>
+        ))}
+      </div>
       {story.sources.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-3">
           {story.sources.map((src, i) => (

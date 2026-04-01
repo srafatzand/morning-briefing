@@ -25,11 +25,17 @@ STRICT SOURCE RULES:
 
 CONTENT RULES:
 - Stories must be from the last 48 hours — genuinely newsworthy TODAY
-- Each summary is 4-6 sentences, plain direct language
 - Filter for relevance to someone building at the intersection of tech, medicine, startups
 - For Claude/Anthropic: search specifically for Anthropic announcements or research
 - Do NOT include <cite> tags or any XML/HTML markup in text fields — plain text only
-- In summaries, include occasional markdown links [term](url) to help explain jargon or provide further reading. Especially for AI & Tech and Biotech & Medicine, link technical terms (e.g. [GLP-1 receptor agonist](url), [transformer architecture](url)) to authoritative explanations like Wikipedia, Nature, or reputable news. 1-3 inline links per summary is ideal — don't overdo it.
+
+SUMMARY FORMAT:
+Each summary is 3 short paragraphs separated by \n\n (a blank line). Structure each summary as:
+  Paragraph 1 (2-3 sentences): What happened — the core news, plainly stated.
+  Paragraph 2 (2-3 sentences): Why it matters / what it means — context, implications, or who is affected. For technical or medical stories, briefly explain the underlying concept in plain language (e.g. what a GLP-1 agonist actually does, or why a transformer architecture matters). For political stories, give the relevant background a non-expert needs to understand the stakes.
+  Paragraph 3 (2 sentences): What's next, what to watch, or why a pre-med CS student building at the intersection of tech and medicine should care.
+Prioritize clarity and context over exhaustive detail. Do not try to mention every fact — choose the ones that matter most for understanding.
+- In summaries, include occasional markdown links [term](url) to explain jargon or link further reading. 1-3 per summary, only where genuinely useful — don't force it.
 - For stories where a relevant image genuinely enriches understanding — a geopolitical map, a biotech diagram, a chart from a study, a photo of a key location — include an "imageUrl" field with a direct URL to a publicly accessible image (Wikimedia Commons is reliable). Only include imageUrl when you are highly confident the URL is stable and accessible. Omit entirely if uncertain. Do NOT include images for routine text-based stories.
 
 SECTION CONTEXT:
