@@ -1,0 +1,24 @@
+import { db } from '@/lib/db';
+import { briefings } from '@/lib/db/schema';
+import { eq } from 'drizzle-orm';
+import { BriefingView } from '@/components/BriefingView';
+import { Header } from '@/components/Header';
+import { notFound } from 'next/navigation';
+import type { BriefingContent } from '@/types';
+
+export default async function ArchiveDatePage({ params }: { params: Promise<{ date: string }> }) {
+  const { date } = await params;
+  const briefing = await db.query.briefings.findFirst({
+    where: eq(briefings.date, date),
+  });
+  if (!briefing) notFound();
+  return (
+    <>
+      <Header />
+      <BriefingView
+        content={briefing.content as BriefingContent}
+        date={briefing.date}
+      />
+    </>
+  );
+}
