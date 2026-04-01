@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isPinValid, createSessionToken } from '@/lib/auth';
 
 export async function POST(req: NextRequest) {
-  const { pin } = await req.json();
+  let pin: string;
+  try {
+    ({ pin } = await req.json());
+  } catch {
+    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+  }
   if (!isPinValid(pin)) {
     return NextResponse.json({ error: 'Invalid PIN' }, { status: 401 });
   }

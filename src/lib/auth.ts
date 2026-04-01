@@ -21,6 +21,9 @@ export async function verifySessionToken(token: string) {
   }
 }
 
+const pinCode = process.env.PIN_CODE;
+if (!pinCode) throw new Error('PIN_CODE environment variable is not set');
+
 export function isPinValid(pin: string) {
-  return pin === process.env.PIN_CODE;
+  return pin === pinCode;
 }
