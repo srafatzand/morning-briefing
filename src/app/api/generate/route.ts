@@ -4,7 +4,7 @@ import { db } from '@/lib/db';
 import { briefings } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 
-export async function POST(req: NextRequest) {
+async function handle(req: NextRequest) {
   const auth = req.headers.get('authorization');
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -23,3 +23,8 @@ export async function POST(req: NextRequest) {
   const briefing = await generateBriefing(today);
   return NextResponse.json({ success: true, date: briefing.date });
 }
+
+// GET: called by Vercel Cron (always sends GET)
+// POST: called manually (curl, scripts)
+export const GET = handle;
+export const POST = handle;
