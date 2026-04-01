@@ -69,7 +69,7 @@ export async function generateBriefing(date: string) {
   const [saved] = await db.insert(briefings).values({
     date,
     modelUsed: 'claude-sonnet-4-20250514',
-    content: content as any,
+    content: content,
     durationMs: Date.now() - start,
   }).returning();
 
