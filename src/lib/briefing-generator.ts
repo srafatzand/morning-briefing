@@ -1,0 +1,77 @@
+import Anthropic from '@anthropic-ai/sdk';
+import { parseBriefingJSON } from './briefing-parser';
+import { db } from './db';
+import { briefings } from './db/schema';
+
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+function buildSystemPrompt(date: string): string {
+  return `You are a personal news briefing assistant for a 19-year-old pre-med CS student in Montreal with entrepreneurial interests at the intersection of tech, medicine, and startups. Today's date is ${date}.
+
+Generate a daily briefing covering these topics:
+- AI & Tech (2 stories)
+- Biotech & Medicine (2 stories)
+- Geopolitics (2 stories)
+- Iran News (1 story)
+- Canadian / Quebec News (1 story)
+- MMA & Combat Sports (1 story)
+- Claude / Anthropic News (1 story)
+
+STRICT SOURCE RULES:
+- For geopolitics and Iran news, use ONLY: Reuters, Al Jazeera, New York Times, Washington Post, BBC, CBC, The Economist
+- For geopolitics, include both Western (Reuters, BBC, NYT, WaPo, The Economist) and non-Western (Al Jazeera) perspectives where available
+- For AI & Tech and Biotech & Medicine, you have more flexibility but prioritize reputable sources, including but not limited to scientific journals like: Nature, Science, JAMA, The New England Journal of Medicine (NEJM)
+- Do NOT cite Twitter, Reddit, Substack, blogs, or any unaccredited source
+
+CONTENT RULES:
+- Stories must be from the last 48 hours — genuinely newsworthy TODAY
+- Each summary is 4-6 sentences, plain direct language
+- Filter for relevance to someone building at the intersection of tech, medicine, startups
+- For Claude/Anthropic: search specifically for Anthropic announcements or research
+
+OUTPUT: Return ONLY a valid JSON object. No markdown fences, no preamble.
+{
+  "sections": [
+    {
+      "topic": "AI & Tech",
+      "stories": [
+        { "headline": "...", "summary": "...", "sources": ["url"] }
+      ]
+    }
+  ]
+}`;
+}
+
+export async function generateBriefing(date: string) {
+  const start = Date.now();
+
+  const response = await anthropic.messages.create({
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 8192,
+    tools: [{
+      type: 'web_search_20250305' as const,
+      name: 'web_search',
+      max_uses: 25,
+    }],
+    system: buildSystemPrompt(date),
+    messages: [{ role: 'user', content: "Generate today's briefing now." }],
+  });
+
+  // Response has multiple blocks (tool use rounds, then final text)
+  // Find the last text block — never assume it's content[0]
+  const textBlock = [...response.content].reverse().find(b => b.type === 'text');
+  if (!textBlock || textBlock.type !== 'text') {
+    throw new Error('Claude did not return a text response');
+  }
+
+  const content = parseBriefingJSON(textBlock.text);
+
+  const [saved] = await db.insert(briefings).values({
+    date,
+    modelUsed: 'claude-sonnet-4-20250514',
+    content: content as any,
+    durationMs: Date.now() - start,
+  }).returning();
+
+  return saved;
+}

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "generate": "tsx scripts/generate-now.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.81.0",
