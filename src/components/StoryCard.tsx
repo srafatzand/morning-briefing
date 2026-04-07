@@ -1,8 +1,6 @@
 import type { Story } from '@/types';
 import type { ReactNode } from 'react';
 
-// Split summary into paragraphs. Uses explicit \n\n breaks if present,
-// otherwise groups sentences into chunks of 3 for older DB entries.
 function getParagraphs(text: string): string[] {
   const stripped = text.replace(/<cite[^>]*>/g, '').replace(/<\/cite>/g, '');
   if (stripped.includes('\n\n')) {
@@ -18,7 +16,6 @@ function getParagraphs(text: string): string[] {
 }
 
 function renderSummary(text: string): ReactNode {
-  // Parse [text](url) markdown links into anchor elements
   const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
   const parts: ReactNode[] = [];
   let lastIndex = 0;
@@ -34,7 +31,7 @@ function renderSummary(text: string): ReactNode {
         href={match[2]}
         target="_blank"
         rel="noopener noreferrer"
-        className="underline underline-offset-2 text-neutral-700 hover:text-neutral-900 transition-colors"
+        className="underline underline-offset-2 text-[#aaa] hover:text-[#ece9e4] transition-colors"
       >
         {match[1]}
       </a>
@@ -51,8 +48,8 @@ function renderSummary(text: string): ReactNode {
 
 export function StoryCard({ story }: { story: Story }) {
   return (
-    <article className="py-5 border-b border-neutral-200 last:border-0">
-      <h3 className="font-serif text-lg font-semibold leading-snug mb-2">
+    <article className="py-7 border-b border-[#1a1a1a] last:border-0">
+      <h3 className="text-base font-semibold leading-snug mb-3 text-[#ece9e4]">
         {story.headline}
       </h3>
       {story.imageUrl && (
@@ -61,27 +58,27 @@ export function StoryCard({ story }: { story: Story }) {
           src={story.imageUrl}
           alt={story.headline}
           loading="lazy"
-          className="w-full rounded-lg object-cover max-h-64 mb-3"
+          className="w-full object-cover max-h-72 mb-4 opacity-80"
         />
       )}
       <div className="space-y-3">
         {getParagraphs(story.summary).map((para, i) => (
-          <p key={i} className="text-neutral-600 text-sm leading-relaxed">
+          <p key={i} className="text-[#c0bdb8] text-sm leading-relaxed">
             {renderSummary(para)}
           </p>
         ))}
       </div>
       {story.sources.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-3">
+        <div className="mt-3 flex flex-wrap gap-4">
           {story.sources.map((src, i) => (
             <a
               key={src}
               href={src}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-neutral-400 hover:text-neutral-700 underline underline-offset-2 transition-colors"
+              className="text-xs text-[#666] hover:text-[#aaa] transition-colors"
             >
-              Source {i + 1}
+              [{i + 1}]
             </a>
           ))}
         </div>

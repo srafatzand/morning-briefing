@@ -14,8 +14,8 @@ export default async function ArchivePage() {
   return (
     <>
       <Header />
-      <div className="max-w-3xl mx-auto px-6 py-12">
-        <h1 className="font-serif text-3xl font-bold mb-8">Archive</h1>
+      <div className="max-w-[90rem] mx-auto px-8 py-14">
+        <h1 className="text-3xl font-semibold text-[#e0ddd8] mb-10 tracking-wide">Archive</h1>
         <ArchiveList entries={all} />
       </div>
     </>

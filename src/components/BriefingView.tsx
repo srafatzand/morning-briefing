@@ -33,51 +33,52 @@ export function BriefingView({ content, date }: Props) {
   const readMinutes = Math.max(1, Math.round(wordCount / 200));
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12">
-      <header className="mb-8">
-        <p className="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3">
+    <div className="max-w-[90rem] mx-auto px-8 py-14">
+      <header className="mb-12 pb-10 border-b border-[#1e1e1e]">
+        <p className="text-xs tracking-[0.25em] uppercase text-[#777] mb-4">
           Morning Briefing
         </p>
-        <h1 className="font-serif text-4xl font-bold leading-tight text-neutral-900 mb-3">
-          Your Daily Morning Brief
+        <h1 className="text-5xl font-semibold leading-tight text-[#ece9e4] mb-4">
+          Your Daily Brief
         </h1>
-        <p className="text-sm text-neutral-500">
-          {formatted} · Est. read time: ~{readMinutes} minutes
+        <p className="text-sm text-[#888] tracking-wide">
+          {formatted} &nbsp;·&nbsp; ~{readMinutes} min read
         </p>
-        <div className="mt-5 border-b-2 border-blue-500" />
       </header>
 
-      <nav className="mb-10 p-4 rounded-lg border border-blue-100 bg-blue-50">
-        <p className="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3">
-          Jump to Section
-        </p>
-        <div className="flex flex-wrap gap-x-5 gap-y-2">
-          {content.sections.map((section) => {
-            const emoji = SECTION_EMOJIS[section.topic];
-            return (
-              <a
-                key={section.topic}
-                href={`#${slugify(section.topic)}`}
-                className="text-sm text-blue-700 hover:text-blue-900 transition-colors"
-              >
-                {emoji && <span className="mr-1">{emoji}</span>}
-                {section.topic}
-              </a>
-            );
-          })}
-        </div>
-      </nav>
+      <div className="flex gap-16">
+        {/* Sticky sidebar nav */}
+        <aside className="hidden lg:block w-56 shrink-0">
+          <div className="sticky top-20">
+            <p className="text-[10px] tracking-[0.2em] uppercase text-[#666] mb-4">
+              Sections
+            </p>
+            <nav className="flex flex-col gap-1">
+              {content.sections.map((section) => (
+                <a
+                  key={section.topic}
+                  href={`#${slugify(section.topic)}`}
+                  className="text-xs text-[#888] hover:text-[#ece9e4] transition-colors py-1 leading-tight"
+                >
+                  {section.topic}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </aside>
 
-      <main>
-        {content.sections.map((section, i) => (
-          <TopicSection
-            key={section.topic}
-            section={section}
-            index={i + 1}
-            emoji={SECTION_EMOJIS[section.topic] ?? ''}
-          />
-        ))}
-      </main>
+        {/* Main content */}
+        <main className="flex-1 min-w-0">
+          {content.sections.map((section, i) => (
+            <TopicSection
+              key={section.topic}
+              section={section}
+              index={i + 1}
+              emoji={SECTION_EMOJIS[section.topic] ?? ''}
+            />
+          ))}
+        </main>
+      </div>
     </div>
   );
 }

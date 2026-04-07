@@ -1,7 +1,35 @@
 {
   "permissions": {
     "allow": [
-      "Bash(find /Users/samyarrafatzand/Projects/morning-briefing -type f -not -path */.git/*)"
+      "Bash(find /Users/samyarrafatzand/Projects/morning-briefing -type f -not -path */.git/*)",
+      "Bash(npx:*)",
+      "Bash(mkdir -p /tmp/morning-briefing-backup)",
+      "Bash(mv /Users/samyarrafatzand/Projects/morning-briefing/CLAUDE.md /Users/samyarrafatzand/Projects/morning-briefing/PRD.md /Users/samyarrafatzand/Projects/morning-briefing/README.md /Users/samyarrafatzand/Projects/morning-briefing/docs /tmp/morning-briefing-backup/)",
+      "Bash(node:*)",
+      "Bash(npm run:*)",
+      "Bash(find /Users/samyarrafatzand/Projects/morning-briefing -maxdepth 2 -type f \\\\\\(-name *.config.* -o -name .eslintrc* \\\\\\))",
+      "Bash(ls -la /Users/samyarrafatzand/Projects/morning-briefing/.eslintrc*)",
+      "Bash(npm install:*)",
+      "Bash(npm list:*)",
+      "Bash(ls:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Skill(claude-api)",
+      "mcp__Neon__list_projects",
+      "mcp__Neon__run_sql",
+      "Skill(update-config)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{redirect_url}\" http://localhost:3000/today)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X POST http://localhost:3000/api/generate)",
+      "Bash(vercel --version)",
+      "Bash(npm i:*)",
+      "mcp__plugin_vercel_vercel__list_teams",
+      "mcp__plugin_vercel_vercel__list_projects",
+      "Bash(vercel link:*)",
+      "mcp__plugin_vercel_vercel__deploy_to_vercel"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "supabase"
+  ],
+  "enableAllProjectMcpServers": true
 }

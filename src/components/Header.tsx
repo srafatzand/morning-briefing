@@ -9,12 +9,14 @@ export function Header() {
     router.push('/login');
   }
   return (
-    <header className="sticky top-0 z-10 border-b border-neutral-200 bg-neutral-50/90 backdrop-blur">
-      <div className="max-w-3xl mx-auto px-6 py-3 flex items-center justify-between">
-        <Link href="/today" className="font-serif text-sm font-semibold">Morning Briefing</Link>
-        <nav className="flex gap-5 text-xs text-neutral-500">
-          <Link href="/archive" className="hover:text-neutral-900 transition-colors">Archive</Link>
-          <button onClick={logout} className="hover:text-neutral-900 transition-colors">Logout</button>
+    <header className="sticky top-0 z-10 border-b border-[#1e1e1e] bg-[#0a0a0a]/95 backdrop-blur">
+      <div className="max-w-[90rem] mx-auto px-8 py-4 flex items-center justify-between">
+        <Link href="/today" className="text-sm font-semibold tracking-widest uppercase text-[#e0ddd8] hover:text-white transition-colors">
+          Morning Briefing
+        </Link>
+        <nav className="flex gap-6 text-xs text-[#555] tracking-wider uppercase">
+          <Link href="/archive" className="hover:text-[#e0ddd8] transition-colors">Archive</Link>
+          <button onClick={logout} className="hover:text-[#e0ddd8] transition-colors">Logout</button>
         </nav>
       </div>
     </header>

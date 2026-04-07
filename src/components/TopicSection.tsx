@@ -13,19 +13,23 @@ interface Props {
 
 export function TopicSection({ section, index, emoji }: Props) {
   return (
-    <section id={slugify(section.topic)} className="mb-12 scroll-mt-20">
-      <div className="flex items-center gap-2 mb-5 pl-4 border-l-4 border-blue-500">
-        {emoji && <span className="text-lg leading-none">{emoji}</span>}
-        <h2 className="text-lg font-bold text-blue-700">
-          {index}. {section.topic}
+    <section id={slugify(section.topic)} className="mb-16 scroll-mt-24">
+      <div className="flex items-baseline gap-3 mb-6">
+        <span className="text-xs text-[#666] font-light tabular-nums w-6 shrink-0">
+          {String(index).padStart(2, '0')}
+        </span>
+        <h2 className="text-base font-semibold text-[#ece9e4] tracking-wide uppercase">
+          {section.topic}
         </h2>
       </div>
       {section.context && (
-        <p className="text-sm text-neutral-500 italic leading-relaxed mb-5 pb-5 border-b border-neutral-100">
+        <p className="text-sm text-[#b8b5b0] italic leading-relaxed mb-6 pl-9 border-l border-[#2a2a2a]">
           {section.context}
         </p>
       )}
-      {section.stories.map((story) => <StoryCard key={story.headline} story={story} />)}
+      <div className="pl-9">
+        {section.stories.map((story) => <StoryCard key={story.headline} story={story} />)}
+      </div>
     </section>
   );
 }
