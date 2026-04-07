@@ -36,7 +36,7 @@ Each summary is 3 short paragraphs separated by \n\n (a blank line). Structure e
   Paragraph 3 (2 sentences): What's next, what to watch, or why a pre-med CS student building at the intersection of tech and medicine should care.
 Prioritize clarity and context over exhaustive detail. Do not try to mention every fact — choose the ones that matter most for understanding.
 - In summaries, include occasional markdown links [term](url) to explain jargon or link further reading. 1-3 per summary, only where genuinely useful — don't force it.
-- For stories where a relevant image genuinely enriches understanding — a geopolitical map, a biotech diagram, a chart from a study, a photo of a key location — include an "imageUrl" field with a direct URL to a publicly accessible image (Wikimedia Commons is reliable). Only include imageUrl when you are highly confident the URL is stable and accessible. Omit entirely if uncertain. Do NOT include images for routine text-based stories.
+- Do NOT include an "imageUrl" field in stories — images are fetched automatically from source URLs.
 
 SECTION CONTEXT:
 For "Geopolitics", "Iran News", and "Canadian / Quebec News" sections, you MUST always include a "context" field. This is required — never omit it. Write 2 sentences of essential background that frames why this region/topic matters right now. This is not a story — it's orientation for the reader. Keep it factual and brief.
@@ -54,7 +54,7 @@ OUTPUT: Return ONLY a valid JSON object. No markdown fences, no preamble.
       "topic": "Geopolitics",
       "context": "Two sentences of background on the current geopolitical landscape.",
       "stories": [
-        { "headline": "...", "summary": "...", "sources": ["url"], "imageUrl": "https://upload.wikimedia.org/..." }
+        { "headline": "...", "summary": "...", "sources": ["url"] }
       ]
     },
     {
@@ -73,6 +73,24 @@ OUTPUT: Return ONLY a valid JSON object. No markdown fences, no preamble.
     }
   ]
 }`;
+}
+
+async function fetchOgImage(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MorningBriefing/1.0)' },
+      signal: AbortSignal.timeout(5000),
+    });
+    const html = await res.text();
+    const match =
+      html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ??
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+    const src = match?.[1] ?? null;
+    // Only return http/https image URLs
+    return src && src.startsWith('http') ? src : null;
+  } catch {
+    return null;
+  }
 }
 
 export async function generateBriefing(date: string) {
@@ -98,6 +116,17 @@ export async function generateBriefing(date: string) {
   }
 
   const content = parseBriefingJSON(textBlock.text);
+
+  // Fetch OG images from each story's first source URL
+  await Promise.all(
+    content.sections.flatMap(section =>
+      section.stories.map(async (story) => {
+        if (story.sources[0]) {
+          story.imageUrl = (await fetchOgImage(story.sources[0])) ?? undefined;
+        }
+      })
+    )
+  );
 
   const [saved] = await db.insert(briefings).values({
     date,

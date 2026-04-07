@@ -25,11 +25,12 @@
       "mcp__plugin_vercel_vercel__list_teams",
       "mcp__plugin_vercel_vercel__list_projects",
       "Bash(vercel link:*)",
-      "mcp__plugin_vercel_vercel__deploy_to_vercel"
+      "mcp__plugin_vercel_vercel__deploy_to_vercel",
+      "Bash(vercel:*)"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "supabase"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }
