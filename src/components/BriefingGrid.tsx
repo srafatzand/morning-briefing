@@ -187,6 +187,7 @@ function StoryModal({ story, onClose }: { story: SelectedStory; onClose: () => v
               </div>
             )}
           </div>
+
         </div>
       </motion.div>
     </AnimatePresence>

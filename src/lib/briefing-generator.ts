@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import probe from 'probe-image-size';
 import { parseBriefingJSON } from './briefing-parser';
 import { db } from './db';
 import { briefings } from './db/schema';
@@ -78,19 +79,54 @@ OUTPUT: Return ONLY a valid JSON object. No markdown fences, no preamble.
 async function fetchOgImage(url: string): Promise<string | null> {
   try {
     const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MorningBriefing/1.0)' },
-      signal: AbortSignal.timeout(5000),
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml',
+        'Accept-Language': 'en-US,en;q=0.9',
+      },
+      signal: AbortSignal.timeout(8000),
+      redirect: 'follow',
     });
     const html = await res.text();
-    const match =
-      html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ??
-      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
-    const src = match?.[1] ?? null;
-    // Only return http/https image URLs
-    return src && src.startsWith('http') ? src : null;
+    // Try og:image, og:image:secure_url, then twitter:image in order
+    const patterns = [
+      /<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i,
+      /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i,
+      /<meta[^>]+property=["']og:image:secure_url["'][^>]+content=["']([^"']+)["']/i,
+      /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image:secure_url["']/i,
+      /<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i,
+      /<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i,
+    ];
+    for (const pattern of patterns) {
+      const match = html.match(pattern);
+      const src = match?.[1] ?? null;
+      if (src && src.startsWith('http')) return src;
+    }
+    return null;
   } catch {
     return null;
   }
+}
+
+// Returns true if the image is suitable as a hero (landscape, large enough)
+async function isValidHeroImage(url: string): Promise<boolean> {
+  try {
+    const result = await probe(url, { timeout: 6000 });
+    const { width, height } = result;
+    const ratio = width / height;
+    return width >= 400 && height >= 200 && ratio >= 1.2 && ratio <= 3.5;
+  } catch {
+    return false;
+  }
+}
+
+// Fetch OG image URL from a page and validate it as a hero image.
+// Returns the image URL if valid, null otherwise.
+async function fetchAndValidateImage(sourceUrl: string): Promise<string | null> {
+  const imgUrl = await fetchOgImage(sourceUrl);
+  if (!imgUrl) return null;
+  const valid = await isValidHeroImage(imgUrl);
+  return valid ? imgUrl : null;
 }
 
 export async function generateBriefing(date: string) {
@@ -117,12 +153,17 @@ export async function generateBriefing(date: string) {
 
   const content = parseBriefingJSON(textBlock.text);
 
-  // Fetch OG images from each story's first source URL
+  // For each story: try sources in order until a valid hero image is found.
+  // Also collect all valid images for the gallery.
   await Promise.all(
     content.sections.flatMap(section =>
       section.stories.map(async (story) => {
-        if (story.sources[0]) {
-          story.imageUrl = (await fetchOgImage(story.sources[0])) ?? undefined;
+        for (const src of story.sources) {
+          const url = await fetchAndValidateImage(src);
+          if (url) {
+            story.imageUrl = url;
+            break;
+          }
         }
       })
     )
