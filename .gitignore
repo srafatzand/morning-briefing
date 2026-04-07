@@ -42,3 +42,6 @@ yarn-error.log*
 next-env.d.ts
 
 docs/status.md
+
+# brainstorm sessions
+.superpowers/
