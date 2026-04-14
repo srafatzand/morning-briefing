@@ -1,6 +1,12 @@
 # Morning Briefing
 
-A personal, password-protected daily news briefing web app. Every night, a scheduler calls the Claude API with live web search to generate a curated briefing across 7 topics. Visit the site in the morning, enter your PIN, and read.
+I built this because reading the news was broken for me in two ways.
+
+**Time.** Finding articles across medicine, tech, and geopolitics every morning meant 20–30 minutes of tab-switching before I even had context on anything.
+
+**Quality.** Misinformation is everywhere. I only wanted to read from reputable, trusted sources.
+
+Every night, Claude searches the web with explicit source constraints, summarizes what actually happened across my personal fields of interest, and stores a structured briefing in a database. By the time I wake up, I have everything I want to read, without the stuff I didn't ask for.
 
 Built with Next.js 16, TypeScript, Tailwind CSS v4, Drizzle ORM, PostgreSQL (Neon), and the Anthropic SDK.
 
@@ -8,12 +14,12 @@ Built with Next.js 16, TypeScript, Tailwind CSS v4, Drizzle ORM, PostgreSQL (Neo
 
 ## What It Does
 
-- **Nightly generation** — a Vercel Cron Job runs at 3am EST, calling Claude with web search to compile 10 fresh stories
+- **Nightly generation** — a Vercel Cron Job runs at 3am EST, calling Claude with web search to compile fresh stories
 - **PIN-protected** — a 4-digit PIN gates the entire site; no accounts, no sign-up
-- **Clean reading experience** — minimal editorial UI with serif typography
+- **Designed reading experience** — dark editorial UI with news cards, hero images, and a dot-grid radial glow background
 - **Archive** — all past briefings are stored and browsable by date
 
-**Topics covered:** AI & Tech · Biotech & Medicine · Geopolitics · Iran News · Canadian/Quebec News · MMA & Combat Sports · Claude/Anthropic News
+**Topics covered:** AI & Tech · Biotech & Medicine · Geopolitics · Iran News · Local Quebec News · MMA & Combat Sports · Claude/Anthropic News
 
 ---
 
