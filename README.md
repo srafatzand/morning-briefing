@@ -12,6 +12,15 @@ Built with Next.js 16, TypeScript, Tailwind CSS v4, Drizzle ORM, PostgreSQL (Neo
 
 ---
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/briefing-hero.png" width="49%" />
+  <img src="docs/screenshots/briefing-sections.png" width="49%" />
+</p>
+
+---
+
 ## What It Does
 
 - **Nightly generation** — a Vercel Cron Job runs at 3am EST, calling Claude with web search to compile fresh stories
